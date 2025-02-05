@@ -61,5 +61,6 @@ class Person
 
 $p = new Person();
 $p->name = "bob";
+print $p->getName();
 $p->__unset('name');
 print $p->getName();
