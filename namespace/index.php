@@ -10,3 +10,4 @@ use PaymentGateway\Paddle\{Transaction, DateTime};
 use PaymentGateway\Stripe\Transaction as StripeTransaction;
 
 var_dump(new Transaction(), new StripeTransaction(), new DateTime());
+
