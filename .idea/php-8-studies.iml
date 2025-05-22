@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/autoload" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/classes_and_oboject_functions" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/namespace" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/object_or_class" isTestSource="false" packagePrefix="test" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
