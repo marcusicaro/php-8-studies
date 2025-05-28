@@ -56,18 +56,40 @@
 
 abstract class Unit
 {
-    public function addUnit(Unit $unit): void
+    public function getComposite(): ?CompositeUnit
     {
-        throw new UnitException(get_class($this) . " is a leaf");
-    }
-    public function removeUnit(Unit $unit): void
-    {
-        throw new UnitException(get_class($this) . " is a leaf");
+        return null;
     }
     abstract public function bombardStrength(): int;
 }
+abstract class CompositeUnit extends Unit
+{
+    private array $units = [];
+    public function getComposite(): ?CompositeUnit
+    {
+        return $this;
+    }
+    public function addUnit(Unit $unit): void
+    {
+        if (in_array($unit, $this->units, true)) {
+            return;
+        }
+        $this->units[] = $unit;
+    }
+    public function removeUnit(Unit $unit): void
+    {
+        $idx = array_search($unit, $this->units, true);
+        if (is_int($idx)) {
+            array_splice($this->units, $idx, 1, []);
+        }
+    }
+    public function getUnits(): array
+    {
+        return $this->units;
+    }
+}
 
-class Army extends Unit
+class Army extends CompositeUnit
 {
     private array $units = [];
     public function addUnit(Unit $unit): void
@@ -111,19 +133,38 @@ class LaserCannonUnit extends Unit
         return 44;
     }
 }
-// listing 10.12
-// create an army
-$main_army = new Army();
-// add some units
-$main_army->addUnit(new Archer());
-$main_army->addUnit(new LaserCannonUnit());
-// create a new army
-$sub_army = new Army();
-// add some units
-$sub_army->addUnit(new Archer());
-$sub_army->addUnit(new Archer());
-$sub_army->addUnit(new Archer());
-// add the second army to the first
-$main_army->addUnit($sub_army);
-// all the calculations handled behind the scenes
-print "attacking with strength: {$main_army->bombardStrength()}\n";
+
+class UnitScript
+{
+    public static function joinExisting(
+        Unit $newUnit,
+        Unit $occupyingUnit
+    ): CompositeUnit {
+        $comp = $occupyingUnit->getComposite();
+        if (! is_null($comp)) {
+            $comp->addUnit($newUnit);
+        } else {
+            $comp = new Army();
+            $comp->addUnit($occupyingUnit);
+            $comp->addUnit($newUnit);
+        }
+        return $comp;
+    }
+}
+
+// // listing 10.12
+// // create an army
+// $main_army = new Army();
+// // add some units
+// $main_army->addUnit(new Archer());
+// $main_army->addUnit(new LaserCannonUnit());
+// // create a new army
+// $sub_army = new Army();
+// // add some units
+// $sub_army->addUnit(new Archer());
+// $sub_army->addUnit(new Archer());
+// $sub_army->addUnit(new Archer());
+// // add the second army to the first
+// $main_army->addUnit($sub_army);
+// // all the calculations handled behind the scenes
+// print "attacking with strength: {$main_army->bombardStrength()}\n";
